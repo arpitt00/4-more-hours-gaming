@@ -10,11 +10,12 @@ const rentalItems = [
     id: 1,
     name: "PlayStation 5",
     image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&h=300&fit=crop",
-    dailyRate: "₹500",
-    weeklyRate: "₹2,500",
-    monthlyRate: "₹7,000",
+    dailyRate: "₹600",
+    weeklyRate: "₹3,000",
+    monthlyRate: "₹8,500",
     available: true,
     includes: ["Console", "1 Controller", "Power Cable", "HDMI Cable"],
+    extraController: "₹120/day",
   },
   {
     id: 2,
@@ -129,6 +130,13 @@ const Rentals = () => {
                       </span>
                     ))}
                   </div>
+
+                  {item.extraController && (
+                    <div className="flex items-center gap-2 p-2 bg-primary/5 rounded-lg border border-primary/20">
+                      <span className="text-sm font-medium text-primary">+ Extra Controller:</span>
+                      <span className="text-sm font-semibold">{item.extraController}</span>
+                    </div>
+                  )}
 
                   <div className="flex gap-2 pt-2">
                     <Button className="flex-1 gaming-button gap-2">
