@@ -3,47 +3,49 @@ import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Check } from "lucide-react";
+import { Calendar, Clock, Check, ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const rentalItems = [
   {
-    id: 1,
+    id: 101,
     name: "PlayStation 5",
     image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&h=300&fit=crop",
-    dailyRate: "₹600",
-    weeklyRate: "₹3,000",
-    monthlyRate: "₹8,500",
+    dailyRate: 600,
+    weeklyRate: 3000,
+    monthlyRate: 8500,
     available: true,
     includes: ["Console", "1 Controller", "Power Cable", "HDMI Cable"],
     extraController: "₹120/day",
   },
   {
-    id: 2,
+    id: 102,
     name: "PlayStation VR2",
     image: "https://images.unsplash.com/photo-1617802690992-15d93263d3a9?w=400&h=300&fit=crop",
-    dailyRate: "₹800",
-    weeklyRate: "₹4,000",
-    monthlyRate: "₹12,000",
+    dailyRate: 800,
+    weeklyRate: 4000,
+    monthlyRate: 12000,
     available: true,
     includes: ["VR Headset", "Sense Controllers", "All Cables"],
   },
   {
-    id: 3,
+    id: 103,
     name: "Logitech G29",
     image: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=400&h=300&fit=crop",
-    dailyRate: "₹400",
-    weeklyRate: "₹2,000",
-    monthlyRate: "₹6,000",
+    dailyRate: 400,
+    weeklyRate: 2000,
+    monthlyRate: 6000,
     available: true,
     includes: ["Steering Wheel", "Pedals", "Mounting Clamps"],
   },
   {
-    id: 4,
+    id: 104,
     name: "PS5 Games Bundle",
     image: "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=400&h=300&fit=crop",
-    dailyRate: "₹100/game",
-    weeklyRate: "₹400/game",
-    monthlyRate: "₹1,000/game",
+    dailyRate: 100,
+    weeklyRate: 400,
+    monthlyRate: 1000,
     available: true,
     includes: ["Choice of 50+ titles", "Disc or Digital"],
   },
@@ -51,6 +53,46 @@ const rentalItems = [
 
 const Rentals = () => {
   const [selectedDuration, setSelectedDuration] = useState<"daily" | "weekly" | "monthly">("weekly");
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
+
+  const getPrice = (item: typeof rentalItems[0]) => {
+    switch (selectedDuration) {
+      case "daily":
+        return item.dailyRate;
+      case "weekly":
+        return item.weeklyRate;
+      case "monthly":
+        return item.monthlyRate;
+    }
+  };
+
+  const handleBookNow = (item: typeof rentalItems[0]) => {
+    const price = getPrice(item);
+    addToCart({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      price: `₹${price.toLocaleString()}`,
+      priceValue: price,
+      type: "rental",
+      duration: selectedDuration,
+    });
+    navigate("/checkout");
+  };
+
+  const handleAddToCart = (item: typeof rentalItems[0]) => {
+    const price = getPrice(item);
+    addToCart({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      price: `₹${price.toLocaleString()}`,
+      priceValue: price,
+      type: "rental",
+      duration: selectedDuration,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -109,9 +151,7 @@ const Rentals = () => {
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-primary">
-                        {selectedDuration === "daily" && item.dailyRate}
-                        {selectedDuration === "weekly" && item.weeklyRate}
-                        {selectedDuration === "monthly" && item.monthlyRate}
+                        ₹{getPrice(item).toLocaleString()}
                       </div>
                       <span className="text-xs text-muted-foreground">
                         per {selectedDuration.replace("ly", "")}
@@ -139,12 +179,21 @@ const Rentals = () => {
                   )}
 
                   <div className="flex gap-2 pt-2">
-                    <Button className="flex-1 gaming-button gap-2">
+                    <Button 
+                      className="flex-1 gaming-button gap-2"
+                      onClick={() => handleBookNow(item)}
+                      disabled={!item.available}
+                    >
                       <Calendar className="w-4 h-4" />
                       Book Now
                     </Button>
-                    <Button variant="outline" size="icon">
-                      <Clock className="w-4 h-4" />
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => handleAddToCart(item)}
+                      disabled={!item.available}
+                    >
+                      <ShoppingCart className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
