@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const products = [
   {
     id: 1,
     name: "PlayStation 5 Digital",
     price: "₹35,999",
+    priceValue: 35999,
     originalPrice: "₹44,990",
     condition: "Pre-owned",
     image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=300&h=300&fit=crop",
@@ -17,6 +19,7 @@ const products = [
     id: 2,
     name: "DualSense Controller",
     price: "₹4,499",
+    priceValue: 4499,
     originalPrice: "₹5,990",
     condition: "Like New",
     image: "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=300&h=300&fit=crop",
@@ -26,6 +29,7 @@ const products = [
     id: 3,
     name: "PSVR2 Headset",
     price: "₹45,999",
+    priceValue: 45999,
     originalPrice: "₹57,990",
     condition: "Pre-owned",
     image: "https://images.unsplash.com/photo-1617802690992-15d93263d3a9?w=300&h=300&fit=crop",
@@ -35,6 +39,7 @@ const products = [
     id: 4,
     name: "Logitech G29 Wheel",
     price: "₹22,999",
+    priceValue: 22999,
     originalPrice: "₹29,995",
     condition: "Excellent",
     image: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=300&h=300&fit=crop",
@@ -43,6 +48,20 @@ const products = [
 ];
 
 const FeaturedProducts = () => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product: typeof products[0]) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      priceValue: product.priceValue,
+      type: "product",
+      condition: product.condition,
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -88,7 +107,11 @@ const FeaturedProducts = () => {
                   {product.originalPrice}
                 </span>
               </div>
-              <Button size="sm" className="w-full gap-2 gaming-button text-xs py-2">
+              <Button 
+                size="sm" 
+                className="w-full gap-2 gaming-button text-xs py-2"
+                onClick={() => handleAddToCart(product)}
+              >
                 <ShoppingCart className="w-3 h-3" />
                 Add to Cart
               </Button>
