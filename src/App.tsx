@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import Index from "./pages/Index";
 import Category from "./pages/Category";
+import CategoryDetail from "./pages/CategoryDetail";
 import Rentals from "./pages/Rentals";
 import CustomPC from "./pages/CustomPC";
 import Profile from "./pages/Profile";
@@ -26,7 +27,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/category" element={<Category />} />
-            <Route path="/category/:id" element={<Category />} />
+            <Route path="/category/:id" element={<CategoryDetail />} />
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/custom-pc" element={<CustomPC />} />
             <Route path="/profile" element={<Profile />} />
