@@ -1,17 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, Grid3X3, Gamepad2, Monitor, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { icon: Home, label: "Home", path: "/" },
-  { icon: Grid3X3, label: "Category", path: "/category" },
-  { icon: Gamepad2, label: "Rentals", path: "/rentals" },
-  { icon: Monitor, label: "Custom PC", path: "/custom-pc" },
-  { icon: User, label: "Profile", path: "/profile" },
-];
+import { useAuth } from "@/context/AuthContext";
 
 const BottomNav = () => {
   const location = useLocation();
+  const { user } = useAuth();
+
+  const navItems = [
+    { icon: Home, label: "Home", path: "/" },
+    { icon: Grid3X3, label: "Category", path: "/category" },
+    { icon: Gamepad2, label: "Rentals", path: "/rentals" },
+    { icon: Monitor, label: "Custom PC", path: "/custom-pc" },
+    { icon: User, label: user ? "Profile" : "Login", path: user ? "/profile" : "/auth" },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border safe-area-bottom">
